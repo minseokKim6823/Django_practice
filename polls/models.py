@@ -60,4 +60,4 @@ class Choice(models.Model):
 
 #delete: Row객체를 얻어온 후에 delete()메소드를 호출한다. delete메소드에 의해서 바로 데이터베이스의 레코드(row)가 삭제된다.
 
-#python manage.py createsuperuser 관리자 만들기
+#python manage.py createsuperuser 관리자 만들기.
