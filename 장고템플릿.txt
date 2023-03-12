@@ -155,4 +155,55 @@
         필터는 연속하여 사용 가능하다.
         {{ text | escape | linebreaks}}
         {{ aaa | truncatewords:20}}aaa라는 변수안에 단어중 20개의 단어를 가져오겠다.
-        {{ list | join:", "}} 
+        {{ list | join:", "}}
+    
+    [내장 필터] 30개 정도 됨
+     - default : 변수가 false이거나 비어있는 경우, 지정된 default를 사용한다. 
+     {{ value | default:"nothing"}} : value가 제공되지 않았거나 비어있는 경우,
+                                    nothing을 출력
+    
+    -length : 값의 길이를 반환, 문자열이나 목록에 대하여 사용할 수 있다.
+     {{value | length}}
+     value = ['a','b','c','d'] 결과값이 4가 된다
+
+     -striptags : 모든 html 태그를 제거한다.
+     {{value | striptags}}
+
+     value = "<b>kim</b> <button>is</button>"인 경우의 결과 값은
+     "kim is"가 된다.
+
+ㅁ 태그 : {% tag %}와 같은 형태이며, 태그는 변수에 비해 더 복잡하다.
+
+    어떤 태그는 텍스트를 생성하고, 또는 루프(반복문)이나 로직을 수행한다.
+     
+     예> {% for a in %} 태그 내용 {% endtag %}
+
+     - for : 배열의 각 원소에 대하여 반복문을 만들 때 사용한다.
+        예를 들어 users =["kim", "lee", "park"]
+        <ul>
+            <li>kim</li>
+            <li>lee</li>
+            <li>park</li>
+        </ul>
+        or
+        <ul>
+        {% for user in users %}
+            <li>kim</li>
+            <li>lee</li>
+            <li>park</li>
+        {% endfor %}
+        </ul>
+    - if and else
+    {% if users %}
+        사용자 수 : {{ users | length }} 
+    {% else %}
+        사용자 없음
+    {% endif %}
+
+    {% if users | length > 1 %}
+        팀 :{% for user in users %} .... {% endfor %}
+    {% else %}
+        user :{{user.0}} 0은 인덱스를 의미
+    {% endif %}
+
+    -block extends(텝플릿 상속)
