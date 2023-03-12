@@ -206,4 +206,50 @@
         user :{{user.0}} 0은 인덱스를 의미
     {% endif %}
 
-    -block extends(텝플릿 상속)
+    - block, extends(텝플릿 상속) ***아주 중요***
+
+    DRY(Don't repeat Yourself)원칙: 코드의 중복을 줄이자
+    템플릿 분야에서 {% extends %}태그를 사용해 코드의 중복을 줄이고 확장하는 태그로
+    가장 많이 사용하는 기능이다. 그 다음으로  많이 사용하는 태그가 {% include %} 태그인데,
+    공통적으로 사용할 수 있는 템플릿 파일을 따로 만들어 두고 그 파일을 가져와서
+    사용하는 방식
+
+    {% include %}
+    {% include "aa/bb.html(파일명)"%} => 템플릿 파일명을 따옴표로 묶어준다.
+    {% include temp_name %}: 파일명이 변수에 들어있을 경우
+
+    위에서 aa/bb.html 파일이 다음과 같다면
+    {{ insa }}, {{person|default:"freind"}}
+
+    {% include "aa/bb.html" %}
+    컨텍스 변수를 사용하여 insa = "하이!" 이고 person = "길동" 이라면
+    렌더링 결과는 "하이!, 길동"
+    
+    {% include "aa/bb.html" with insa="안녕!" person="말똥" %}
+    랜더링 결과는 "안녕!, 말똥"
+
+    {%include  "aa/bb.html" with insa="하이!" only %}
+    컨텍스트 변수에서 insa = "안녕!", person ="개똥" 으로 주어져 있다면 
+    위 문장의 렌더링 결과는 "하이!, 개똥"
+
+    {% static %} 태그 
+
+    장고에서 정적 파일은 image, js, css 파일들을 의미한다.
+    이런 정적파일은 템플릿 작업시에 자주 사용하므로 {% static %} 태그를 이용하여
+    정적 파일을 쉽게 처리 할 수 있도록 한다.
+
+    템플릿 파일에서 정적 파일을 사용할 경우에는 정적파일을 찾을 수 있는 URL을 구성한다.
+
+    settings.py에 static_url 설정 항목과 {% static arg %}의 arg로 주어진 
+    정적파일을 합쳐서 URL을 만든다.
+
+    <예>
+    --------------settings.py------------------
+    STATIC_URL ='/static/'
+
+    --------------템플릿 파일-------------------
+    {% load static %}
+    <img src="{% static 'img/hello.png' %}" alt = "hello!" />
+
+    위의 태그를 처리한 결과는 
+    <img src="/static/img/hello.png" alt="hello!"/>
