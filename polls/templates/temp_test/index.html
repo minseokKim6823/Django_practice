@@ -1,16 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel = "stylesheet" href="http://maxcdn.bootstrapcdn.com/ bootstap/3.3.6/css/bootstrap.min.css">
-    <script src ="https: ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
-    <script src = "maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
-    <title>설문조사</title>
+    <title>Document</title>
 </head>
 <body>
-    
+    <div class ="container">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <td><b>질문</b></td>
+                    <td><b>날짜/시간</b></td>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- <tr>
+                    <td>무슨 음식을 좋아하나요?</td>
+                    <td>2023-3-11</td>
+                </tr>
+                <tr>
+                    <td>무슨 음악을 좋아하나요</td>
+                    <td>2023-6-7</td>
+                </tr> -->
+                {% for question in questions %} 
+                    <tr>
+                        <td>{{ question.question_txt}}</td>
+                        <td>{{ question.pub_date }}</td>
+                    </tr>
+                {% endfor%}
+            </tbody> 
+        </table>
+    </div>
 </body>
 </html>
