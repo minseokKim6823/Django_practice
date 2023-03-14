@@ -253,3 +253,58 @@
 
     위의 태그를 처리한 결과는 
     <img src="/static/img/hello.png" alt="hello!"/>
+
+    arg 값을 컨텍스트 변수를 이용할 수 있다.
+    {% load static %}
+    <link rel= "stylesheet" href="{% static user_css %}" type="text/css"/>
+
+    URL을 템플릿 변수에 저장하는 법
+    {%load static %}
+    {% static "img/hello.png" as insa %}
+
+    <img src = "{{ insa }}" />
+
+    {% load static %} 와 {% load staticfiles %}
+    
+    /django/templatetags/static.py
+    /django/contrib/staticfiles/templatetags/staticfiles.py
+
+    위의 두개의 파일에서 {% static %}태그를 제공한다.
+
+    일반적으로 정적파일이 장고가 실행하는 서버와 동일한 서버(로컬서버)에 존재하기 때문에
+    static.py나 staticfiles.py에서 제공하는 {%static%}태그를 사용하는 것은 가능하다. 
+    즉. 로컬서버에서는 둘 중에 어느하나를 사용해도 기능상의 차이가 없다
+
+    하지만, 클라우드 서버나 CDN(Content Delivery Network)의 서버에 존재한다면
+    staticfiles 앱의 {%static%}태그를 사용해야한다.
+
+    그 이유는 staticfiles앱의 {%static%}태그는 STATICFILES_STORAGE 설정 항목을 사용해 
+    외부 서버에 저장된 정적 파일을 인식하기 때문이다.
+
+    {% load staticfiles %}
+    <img src ="{% static "img/hello.png" %} alt ="hello" />
+
+    {% load static from staticfiles %}  
+    <img src ="{% static "img/hello.png" %} alt ="hello" />
+
+ㅁ staticfiles 앱의 기능
+
+   장고의 개발환경에서 사용하는 웹서버는 runserver 이다. runserver가 실행된 후
+   정적파일 처리가 필요할 경우 runserver는 staticfiles애븡ㄹ 사용하여 정적파일을 처리한다.
+   단, DEBUG모두가 True인 경우에만 staticfiles앱이 동작한다.
+
+   runserver는 다음과 같이 정적 파일을 처리
+
+   1.  클라이언트(브라우저)는 URL을 포함해서 웹 요청을 서버에 한다.
+   2.  장고 이 요청 URL이 STATIC_URL로 시작하는지 검사
+   3.  요청 URL이 STATIC_URL로 시작하면, 장고는 staticfiles앱을 사용한다.
+   4.  staticfiles앱은 STATICFILES_FINERS에 지정된 파인더로 정적파일을 검색한다.
+
+        settings.py에서 
+        
+        STATICFILES_FINDERS = (
+            "django.contrib.staticfiles.finders.FileSystemFinder",
+            "django.contrib.staticfiles.finders.AppDirectoriesFinder"
+        )
+    5. 파인더에 따라서 검색하는 디렉토리가 달라진다.
+    6. 정적파일을 찾으면 해당 파일을 클라이언트에 응답한다.
