@@ -1,5 +1,5 @@
 from django.shortcuts import render,get_object_or_404
-from django.http import HttpResponse ,HttpResponseNotFound
+from django.http import HttpResponse ,HttpResponseNotFound, HttpResponseRedirect
 #웹서버에서 실행되는 코드 응답을 위해서 Response 객체 필요 요청시는 Request객체 서버 응답은 Response
 from django.template import loader
 from django.http import Http404
@@ -56,4 +56,27 @@ def result(request, question_id):
     return HttpResponse("당신은 %s번 질문의 결과를 보고 있습니다." %question_id)
 
 def vote(request, question_id):
-    return HttpResponse("당신은 %s번 질문에 투표를 합니다." %question_id)
+    question =get_object_or_404(Question,pk=question_id)
+    try:
+        selected_choice=question.choice_set.get(pk = request.POST['choice'])
+    except(KeyError, Choice.DoesNotExist):
+        return render(request, 'polls/detail.html',{
+            'question':question,
+            'error_message':"선택 에러 입니다.",
+            })
+    else:
+        selected_choice.votes+=1
+        selected_choice.save()
+
+        return HttpResponseRedirect(reverse('polls:results', args=question.id,))
+        # POST 데이터 처리가 성공적으로 이루어 지면 항상 HttpResponseRedirect를 리턴한다. 
+        # 이 방법을 통해 유저가 브라우저의 뒤로가기 버튼을 눌렀을 때 데이터가 두 번 저장되는 것을 방지 할 수 있다.
+        # 이 방법은 모든 웹개발에 적용된다.
+
+        #reverse()함수는 뷰의 이름과 뷰를 가리키는 URL패턴의 일부인 변수를 전달 받아서
+        #문자열로 리턴한다. 예> '/polls/4/results/'
+
+    #return HttpResponse("당신은 %s번 질문에 투표를 합니다." %question_id)
+
+#request.POST : 사전과 같은 객체이다
+#request.POST['choice'] : 선택된 설문의 ID를 문자열로 반환 (request.POST는 항상 문자열로 반환)
