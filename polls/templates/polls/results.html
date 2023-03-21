@@ -1,0 +1,8 @@
+<h1>{{question.question_txt}}</h1>
+
+<ul>
+    {% for choice in question.choice_set.all %}
+        <li>{{choice.choice_text}}----{{ choice.votes }}  </li>
+    {% endfor %}
+
+<a href="{% url 'polls:detail' question.id %}"> 다시 투표하기 </a>

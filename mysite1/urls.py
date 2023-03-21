@@ -17,6 +17,6 @@ from django.contrib import admin
 from django.urls import path, include
 
 urlpatterns = [
-    path('', include('polls.urls')),#''따옴표 사이에 아무것도 안넣는게 맞음
+    path('', include('polls.urls')), #''따옴표 사이에 아무것도 안넣는게 맞음
     path('', admin.site.urls),
 ]

@@ -3,8 +3,8 @@ from django.http import HttpResponse ,HttpResponseNotFound, HttpResponseRedirect
 #웹서버에서 실행되는 코드 응답을 위해서 Response 객체 필요 요청시는 Request객체 서버 응답은 Response
 from django.template import loader
 from django.http import Http404
-
-from .models import Question #models.py에Question 함수 있음
+from django.urls import reverse
+from .models import Question, Choice #models.py에Question 함수 있음
 # Create your views here.
 def index(request):
     # questions =Question.objects.all()
@@ -52,11 +52,13 @@ def detail(request,question_id):
     #return HttpResponse("당신은 %s번 질문을 보고 있습니다." %question_id)
     return render(request, 'polls/detail.html', {'question': question})#50번째줄 question 객체가 넘어가서 detail뷰에서 호출
 
-def result(request, question_id):
-    return HttpResponse("당신은 %s번 질문의 결과를 보고 있습니다." %question_id)
+def results(request, question_id):
+    question = get_object_or_404(Question, pk=question_id)
+    return render(request, 'polls/results.html',{'question':question})
+    #return HttpResponse("당신은 %s번 질문의 결과를 보고 있습니다." %question_id)
 
 def vote(request, question_id):
-    question =get_object_or_404(Question,pk=question_id)
+    question =get_object_or_404(Question, pk=question_id)
     try:
         selected_choice=question.choice_set.get(pk = request.POST['choice'])
     except(KeyError, Choice.DoesNotExist):
@@ -68,7 +70,7 @@ def vote(request, question_id):
         selected_choice.votes+=1
         selected_choice.save()
 
-        return HttpResponseRedirect(reverse('polls:results', args=question.id,))
+        return HttpResponseRedirect(reverse('polls:results', args=(question.id,)))# args는 튜플 형탠
         # POST 데이터 처리가 성공적으로 이루어 지면 항상 HttpResponseRedirect를 리턴한다. 
         # 이 방법을 통해 유저가 브라우저의 뒤로가기 버튼을 눌렀을 때 데이터가 두 번 저장되는 것을 방지 할 수 있다.
         # 이 방법은 모든 웹개발에 적용된다.
