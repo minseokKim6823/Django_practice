@@ -33,8 +33,8 @@ def index(request):
     context = {'latest_question_list': latest_question_list}
 
     # render함수는 request객수를 첫번째 인수로받고,template이름을 두번째 인자로 사용, 
-        # 세번째 인자는 (optional)인자로 컨텍스트(사전형 객체)를 받는다.
-        # render함수는 HttpResponse객체를 리턴한다
+    # 세번째 인자는 (optional)인자로 컨텍스트(사전형 객체)를 받는다.
+    # render함수는 HttpResponse객체를 리턴한다
     return render(request,'polls/index.html',context)
 
 
@@ -47,6 +47,7 @@ def detail(request,question_id):
     # except:
     #     return HttpResponseNotFound("없는 질문 입니다.")
     #-------------------------------------------------------------
+
     question =get_object_or_404(Question,pk = question_id)#id값을 받고 53번째줄 이동
 
     #return HttpResponse("당신은 %s번 질문을 보고 있습니다." %question_id)

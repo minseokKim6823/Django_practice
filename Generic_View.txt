@@ -15,8 +15,31 @@
 
     * Generic Display View
     - DetailView : 한 객체에 대한 상세한 정보를 보여준다.
+            -- ListView와 함께 가장 많이 사용하는 제네릭 뷰 중 하나이다. 특정객체 하나에 대한 정보를 보여주는 뷰
+              테이블이 기본 키(pk)로 지정된 레코드 하나에 대한 정보들을 보여주는 것이다.
+            -- 동작 : 테이블에서 레코드 하나를 읽은 후에, 그 레코드를 object context 변수에 담아서 템플릿에 넘겨준다.
+                    넘겨준다. 템플릿 파일에서는 {{object}} 변수를 사용해서 레코드 정보를 출력한다.
+            --
+                class DetailView(generic.DetailView)
+                    model = Question        
+
+                위에 코드에서 보면 Question 테이블만 지정되어 있다.
+                그런데 어떻게 특정 레코드를 가져올 수 있는가?
+                URLconf에서 특정 레코드를 가져올 수 있도록 pk값을 지정해 준다.
+                예>
+                path('<int:pk>',views.DetailView.as_view(),name='detail')
+
     - ListView : 조건에 맞는 여러개의 객체를 보여준다
-    
+        -- DetailView와 함계 자주 사용되는 제네릭 뷰이다. 여러 객체의 리스트르 보여주는 뷰
+           테이블의 모든 레코드를 리스팀해 주는 역할을 한다.
+        -- 동작: 테이블에서 모든 레코드를 읽은 후에, 그 레코드 들을 object_list context에 담아서
+                템플릿에 넘겨준다. 템플릿 파일에서는 {{object_list}} 변수를 사용해서 레코드의 리스트를
+                출력해준다.
+        --
+            class IndexView(generic.ListView):
+                model = Question
+
+
     * Generic Edit View
     - FormView : 폼이 주어지면 해당 폼을 보여주는 뷰
     - CreateView : 객체를 생성하는 폼을 보여주는 뷰
@@ -24,11 +47,29 @@
     - DeleteView : 기존 객체를 삭제하는 폼을 보여주는 뷰
      
     *Generic Date View
-    -YearArchiveView : 연도에 해당하는 객체를 보여주는 뷰
-    -MonthArchiveView : 연도와 월이 주어지면 그에 해당하는 객체들을 보여주는 뷰
-    -WeekArchiveView : 연도와 week가 주어지면 그에 해당하는 객체들을 보여주는 뷰
+    - YearArchiveView : 연도에 해당하는 객체를 보여주는 뷰
+    - MonthArchiveView : 연도와 월이 주어지면 그에 해당하는 객체들을 보여주는 뷰
+    - WeekArchiveView : 연도와 week가 주어지면 그에 해당하는 객체들을 보여주는 뷰
 
-    -DayArchiveView : 년, 월, 일 주어지면 그날짜에 해당하는 객체들을 보여주는 뷰
-    -TodayArchiveView : 오늘 날짜에 해당하는 객체들을 보여주는 뷰
-    -DateArchiveView : 년, 월, 일, 기본 키(또는 슬러그)가 주어지면 그에 해당하는 
+    - DayArchiveView : 년, 월, 일 주어지면 그날짜에 해당하는 객체들을 보여주는 뷰
+    - TodayArchiveView : 오늘 날짜에 해당하는 객체들을 보여주는 뷰
+    - DateArchiveView : 년, 월, 일, 기본 키(또는 슬러그)가 주어지면 그에 해당하는 
                        특정 객체 하나에 대한 상세한 정보를 보여주는 뷰
+
+                    
+    
+    * 제네릭 뷰 오버라이딩(속성, 메소드) 
+
+        제네릭 뷰에서 제공하는 메소드들 
+
+        get_queryset()메소드는 BaseView(View, TemplateView, RedirectView)를 제외한
+        모든 제네릭 뷰에서 사용하는 메소드이다.
+
+        출력하고자하는 객체(Queryset, 객체리스트)를 반환한다.
+
+        get_context_data(**kwarg)
+        모든 제네릭뷰에서 사용하는 메소드이며 템플릿에서 사용할 컨텍스트 데이터를 반환한다
+
+        form_valid(form)
+        FormVIew, CreateView, UpdateView 에서 사용하는 메소드이다.
+        get_success_url()메소드가 반환하는 URL로 리다이렉트 수행
