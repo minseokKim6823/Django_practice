@@ -130,5 +130,4 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 
 
-
 #관리자 id=adamin pw=test1234
